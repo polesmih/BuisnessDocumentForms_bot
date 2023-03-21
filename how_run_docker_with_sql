@@ -1,0 +1,16 @@
+# Запускаем docker с mysql на борту, где <doc-bot> - имя нашего контейнера, а <password> - пароль от базы данных
+docker run --name doc-bot -e MYSQL_ROOT_PASSWORD=password -e LANG=C.UTF-8 -d -p 3306:3306 mysql
+
+# Заходим внутрь контейнера (Docker попросит ввести пароль, который мы задавали выше. В нашем примере - password)
+docker exec -it doc-bot mysql -uroot -p
+
+# Создаем нашу базу
+CREATE DATABASE doc_bot;
+
+# Выходим из контейнера при помощи команды `exit`
+
+# Чтобы остановить контейнер
+docker stop doc-bot
+
+# Если хотим удалить контейнер
+docker rm doc-bot

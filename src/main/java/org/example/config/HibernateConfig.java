@@ -1,7 +1,6 @@
 package org.example.config;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -22,11 +21,7 @@ public class HibernateConfig {
         }
     }
 
-    public static Session getSession() throws HibernateException {
-        return sessionFactory.openSession();
-    }
-
-    public static void closeSessionFactory() {
-        sessionFactory.close();
+    public static SessionFactory getSessionFactory() throws HibernateException {
+        return sessionFactory;
     }
 }
