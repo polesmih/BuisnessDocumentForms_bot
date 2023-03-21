@@ -2,7 +2,7 @@
 Telegram-бот для отправки пользователю готового к заполнению и печати файла Word, содержащего форму юридического или процедурного документа из представленных на выбор.  
 
 Бот в Telegram: [@SimpleForms_bot](https://t.me/SimpleForms_bot)  
-[Статья на Хабр:](https://habr.com/ru/post/723580/)  
+[Статья на Хабр](https://habr.com/ru/post/723580/)  
 
 ## Лицензия  
 Этот проект лицензирован по лицензии MIT.  
@@ -62,6 +62,6 @@ Telegram Bot API
 - после чего ввести: java -jar docBot.jar  
 5. В случае успеха в терминале PuTTY отобразятся те же процессы, что и в консоли среды разработки. После можно выйти из клиента.  
 
-### Особая благодарность:  
+### Особая благодарность:
 [Andrew](https://github.com/MonsterDeveloper)  
 [Sergey Kozyrev](https://github.com/taksebe-official)  
