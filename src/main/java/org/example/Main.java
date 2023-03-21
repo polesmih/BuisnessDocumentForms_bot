@@ -11,12 +11,13 @@ public class Main {
         Logger logger = new Logger();
 
         try {
+            Bot bot = new Bot();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new Bot());
+            telegramBotsApi.registerBot(bot);
+            bot.initMenu();
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-
         logger.log("Бот запущен!");
     }
 }

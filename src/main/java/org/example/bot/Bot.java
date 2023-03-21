@@ -20,13 +20,16 @@ import org.example.handler.typesOfDocumentsHandler.DocumentTypes;
 import org.example.handler.vouchersHandler.VouchersSelectionHandler;
 import org.example.handler.vouchersHandler.VouchersTypes;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import static org.example.bot.BotCommands.LIST_OF_COMMAND;
 import static org.example.bot.settings.MessagesConst.UNKNOWN;
 
 public class Bot extends TelegramLongPollingBot {
-
     public Logger logger = new Logger();
     DocumentSelectionHandler documentsHandler = new DocumentSelectionHandler();
     ContractSelectionHandler contractsHandler = new ContractSelectionHandler();
@@ -45,9 +48,10 @@ public class Bot extends TelegramLongPollingBot {
     CommandServiceType commandType = new CommandServiceType();
     CommandSelectionHandler commandHandler = new CommandSelectionHandler(this);
     private final static ConfigSettings settings = ConfigSettings.getInstance();
-    String message_text;
-    Long chat_id;
 
+    public void initMenu() throws TelegramApiException {
+        execute(new SetMyCommands(LIST_OF_COMMAND, new BotCommandScopeDefault(), null));
+    }
 
     @Override
     public String getBotUsername() {
@@ -61,38 +65,37 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        message_text = update.getMessage().getText();
-        chat_id = update.getMessage().getChatId();
-
         if (update.hasMessage() && update.getMessage().hasText()) {
+            var messageText = update.getMessage().getText();
+            var chatId = update.getMessage().getChatId();
 
-            if (commandType.types().contains(message_text)) {
+            if (commandType.types().contains(messageText)) {
                 commandHandler.onUpdateReceived(update);
 
-            } else if (docTypes.types().contains(message_text)) {
+            } else if (docTypes.types().contains(messageText)) {
                 documentsHandler.onUpdateReceived(update);
 
-            } else if (contTypes.types().contains(message_text)) {
+            } else if (contTypes.types().contains(messageText)) {
                 contractsHandler.onUpdateReceived(update);
 
-            } else if (actTypes.types().contains(message_text)) {
+            } else if (actTypes.types().contains(messageText)) {
                 actHandler.onUpdateReceived(update);
 
-            } else if (proxyTypes.types().contains(message_text)) {
+            } else if (proxyTypes.types().contains(messageText)) {
                 proxyHandler.onUpdateReceived(update);
 
-            } else if (vouchersTypes.types().contains(message_text)) {
+            } else if (vouchersTypes.types().contains(messageText)) {
                 vouchersHandler.onUpdateReceived(update);
 
-            } else if (climesTypes.types().contains(message_text)) {
+            } else if (climesTypes.types().contains(messageText)) {
                 climesHandler.onUpdateReceived(update);
 
-            } else if (customerTypes.types().contains(message_text)) {
+            } else if (customerTypes.types().contains(messageText)) {
                 customerHandler.onUpdateReceived(update);
 
             } else {
                 try {
-                    execute(MessageHandler.sendMessage(chat_id, UNKNOWN));
+                    execute(MessageHandler.sendMessage(chatId, UNKNOWN));
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
@@ -101,4 +104,3 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 }
-
