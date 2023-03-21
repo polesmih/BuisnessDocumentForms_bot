@@ -23,7 +23,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static org.example.bot.settings.MessagesConst.*;
+import static org.example.bot.settings.MessagesConst.UNKNOWN;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -43,7 +43,7 @@ public class Bot extends TelegramLongPollingBot {
     ClimesTypes climesTypes = new ClimesTypes();
     CustomerTypes customerTypes = new CustomerTypes();
     CommandServiceType commandType = new CommandServiceType();
-    CommandSelectionHandler commandHandler = new CommandSelectionHandler();
+    CommandSelectionHandler commandHandler = new CommandSelectionHandler(this);
     private final static ConfigSettings settings = ConfigSettings.getInstance();
     String message_text;
     Long chat_id;

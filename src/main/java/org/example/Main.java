@@ -18,7 +18,5 @@ public class Main {
         }
 
         logger.log("Бот запущен!");
-
     }
-
 }
