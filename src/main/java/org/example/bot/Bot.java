@@ -21,12 +21,11 @@ import org.example.handler.vouchersHandler.VouchersSelectionHandler;
 import org.example.handler.vouchersHandler.VouchersTypes;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static org.example.bot.BotCommands.LIST_OF_COMMAND;
+import static org.example.command.BotCommands.LIST_OF_COMMAND;
 import static org.example.bot.settings.MessagesConst.UNKNOWN;
 
 public class Bot extends TelegramLongPollingBot {
