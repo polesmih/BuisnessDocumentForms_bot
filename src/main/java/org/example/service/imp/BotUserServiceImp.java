@@ -1,8 +1,9 @@
-package org.example.dao.imp;
+package org.example.service.imp;
 
 import jakarta.transaction.Transactional;
 import org.example.dao.BotUserDAO;
-import org.example.dao.BotUserService;
+import org.example.dao.imp.BotUserDAOImp;
+import org.example.service.BotUserService;
 import org.example.entity.BotUser;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class BotUserServiceImp implements BotUserService {
 
     @Override
     public void add(BotUser user) {
-        userDAO.add(user);
+        userDAO.save(user);
     }
 
     @Override
@@ -47,11 +48,11 @@ public class BotUserServiceImp implements BotUserService {
 
     @Override
     public List<BotUser> findByName(String name) {
-        return userDAO.findByName(name);
+        return userDAO.getByName(name);
     }
 
     @Override
     public long getUserCount() {
-        return userDAO.getUserCount();
+        return userDAO.getCount();
     }
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bot_users")
-public class BotUser {
+public class BotUser implements BotEntity{
     @Id
     private Long id;
     private String firstName;

@@ -3,17 +3,12 @@ package org.example.dao.imp;
 import org.example.config.HibernateConfig;
 import org.example.dao.BotUserDAO;
 import org.example.entity.BotUser;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class BotUserDAOImp implements BotUserDAO {
-    private SessionFactory sessionFactory;
-
+public class BotUserDAOImp extends AbstractDAO implements BotUserDAO {
     @Override
     public List<BotUser> getAll() {
         sessionFactory = HibernateConfig.getSessionFactory();
@@ -31,93 +26,31 @@ public class BotUserDAOImp implements BotUserDAO {
 
     @Override
     public BotUser getById(int id) {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        BotUser user = null;
-        try (Session session = sessionFactory.openSession()) {
-            user = session.get(BotUser.class, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            this.sessionFactory = null;
-        }
-        return user;
+        return (BotUser) findEntityById(id, new BotUser());
     }
 
     @Override
-    public void add(BotUser user) {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            this.sessionFactory = null;
-        }
+    public void save(BotUser user) {
+        addEntity(user);
     }
 
     @Override
     public void update(BotUser user) {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.merge(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            this.sessionFactory = null;
-        }
+        updateEntity(user);
     }
 
     @Override
     public void delete(BotUser user) {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.remove(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            this.sessionFactory = null;
-        }
+        deleteEntity(user);
     }
 
     @Override
     public void deleteAll() {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            Query<BotUser> query = session.createQuery("delete from BotUser", BotUser.class);
-            query.executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            this.sessionFactory = null;
-        }
+        deleteAllEntity(new BotUser());
     }
 
     @Override
-    public List<BotUser> findByName(String name) {
+    public List<BotUser> getByName(String name) {
         sessionFactory = HibernateConfig.getSessionFactory();
         List<BotUser> users = null;
         try (Session session = sessionFactory.openSession()) {
@@ -133,15 +66,7 @@ public class BotUserDAOImp implements BotUserDAO {
     }
 
     @Override
-    public long getUserCount() {
-        sessionFactory = HibernateConfig.getSessionFactory();
-        try (Session session = sessionFactory.openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM BotUser", Long.class);
-            return query.getSingleResult();
-        } catch (HibernateException e) {
-            throw new RuntimeException("Failed to get user count", e);
-        } finally {
-            this.sessionFactory = null;
-        }
+    public long getCount() {
+        return getEntityCount(new BotUser());
     }
 }

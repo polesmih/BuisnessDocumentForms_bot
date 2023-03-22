@@ -9,7 +9,7 @@ public interface BotUserDAO {
 
     BotUser getById(int id);
 
-    void add(BotUser user);
+    void save(BotUser user);
 
     void update(BotUser user);
 
@@ -17,6 +17,6 @@ public interface BotUserDAO {
 
     void deleteAll();
 
-    List<BotUser> findByName(String name);
-    long getUserCount();
+    List<BotUser> getByName(String name);
+    long getCount();
 }

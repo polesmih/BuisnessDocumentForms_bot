@@ -1,4 +1,4 @@
-package org.example.dao;
+package org.example.service;
 
 import org.example.entity.BotUser;
 
