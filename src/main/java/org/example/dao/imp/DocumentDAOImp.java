@@ -4,6 +4,7 @@ import org.example.config.HibernateConfig;
 import org.example.dao.DocumentDAO;
 import org.example.entity.DocumentInfo;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -12,6 +13,26 @@ public class DocumentDAOImp extends AbstractDAO implements DocumentDAO {
     @Override
     public void save(DocumentInfo docInfo) {
         addEntity(docInfo);
+    }
+
+    @Override
+    public void saveAll(List<DocumentInfo> infoList) {
+        sessionFactory = HibernateConfig.getSessionFactory();
+        Transaction transaction = null;
+
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+
+            infoList.forEach(session::persist);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            this.sessionFactory = null;
+        }
     }
 
     @Override

@@ -7,6 +7,8 @@ import java.util.List;
 public interface DocumentDAO {
     void save(DocumentInfo docInfo);
 
+    void saveAll(List<DocumentInfo> infoList);
+
     DocumentInfo getById(long id);
 
     DocumentInfo getByIndex(int docIndex);

@@ -11,6 +11,7 @@ public class ConfigSettings {
     private String token;
     private String userName;
     private String docPath;
+    private String jsonPath;
     private Properties properties;
     public static final String FILE_NAME = "config.properties";
     private static ConfigSettings instance = new ConfigSettings();
@@ -42,6 +43,11 @@ public class ConfigSettings {
             docPath = properties.getProperty("doc.path");
             if (docPath == null) {
                 throw new RuntimeException("Doc path is null");
+            }
+
+            jsonPath = properties.getProperty("json.path");
+            if (jsonPath == null) {
+                throw new RuntimeException("Json path is null");
             }
 
         } catch (RuntimeException | IOException e) {
