@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DocumentServiceImp implements DocumentService {
     private final Bot bot;
@@ -30,11 +32,25 @@ public class DocumentServiceImp implements DocumentService {
             return null;
         }
 
-        File file = Path.of(docInfo.getFilePath()).toFile();
+        File file = Path.of(docInfo.getDocPath()).toFile();
         InputFile inputFile = new InputFile(file);
         SendDocument sendDocument = new SendDocument();
         sendDocument.setDocument(inputFile);
         return sendDocument;
+    }
+
+    @Override
+    public List<SendDocument> getAllByType(String docType) {
+        List<SendDocument> sendDocuments = new ArrayList<>();
+        var docsInfo = documentDAO.getAllByType(docType);
+
+        docsInfo.forEach(doc -> {
+            File file = Path.of(doc.getDocPath()).toFile();
+            sendDocuments.add(SendDocument.builder()
+                    .document(new InputFile(file))
+                    .build());
+        });
+        return sendDocuments;
     }
 
     @Override
@@ -46,7 +62,7 @@ public class DocumentServiceImp implements DocumentService {
         }
 
         try {
-            Files.delete(Path.of(docInfo.getFilePath()));
+            Files.delete(Path.of(docInfo.getDocPath()));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

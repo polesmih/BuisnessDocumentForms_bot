@@ -10,6 +10,7 @@ import java.util.Properties;
 public class ConfigSettings {
     private String token;
     private String userName;
+    private String docPath;
     private Properties properties;
     public static final String FILE_NAME = "config.properties";
     private static ConfigSettings instance = new ConfigSettings();
@@ -36,6 +37,11 @@ public class ConfigSettings {
             userName = properties.getProperty("username");
             if (userName == null) {
                 throw new RuntimeException("UserName value is null");
+            }
+
+            docPath = properties.getProperty("doc.path");
+            if (docPath == null) {
+                throw new RuntimeException("Doc path is null");
             }
 
         } catch (RuntimeException | IOException e) {

@@ -16,9 +16,10 @@ public class DocumentInfo implements BotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer fileIndex;
-    private String fileName;
-    private String filePath;
+    private Integer docIndex;
+    private String docName;
+    private String docPath;
+    private String docType;
     private String description;
     private LocalDateTime dateCreate;
 }

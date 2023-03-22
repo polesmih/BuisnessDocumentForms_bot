@@ -6,6 +6,8 @@ import org.example.entity.DocumentInfo;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class DocumentDAOImp extends AbstractDAO implements DocumentDAO {
     @Override
     public void save(DocumentInfo docInfo) {
@@ -22,7 +24,7 @@ public class DocumentDAOImp extends AbstractDAO implements DocumentDAO {
         sessionFactory = HibernateConfig.getSessionFactory();
         DocumentInfo documentInfo = null;
         try (Session session = sessionFactory.openSession()) {
-            Query<DocumentInfo> query = session.createQuery("from DocumentInfo where fileIndex=:fIndex", DocumentInfo.class);
+            Query<DocumentInfo> query = session.createQuery("from DocumentInfo where docIndex=:fIndex", DocumentInfo.class);
             query.setParameter("fIndex", "%" + docIndex + "%");
             documentInfo = query.getSingleResult();
         } catch (Exception e) {
@@ -31,6 +33,22 @@ public class DocumentDAOImp extends AbstractDAO implements DocumentDAO {
             this.sessionFactory = null;
         }
         return documentInfo;
+    }
+
+    @Override
+    public List<DocumentInfo> getAllByType(String docType) {
+        sessionFactory = HibernateConfig.getSessionFactory();
+        List<DocumentInfo> documentsInfo = null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<DocumentInfo> query = session.createQuery("from DocumentInfo where docType like :type", DocumentInfo.class);
+            query.setParameter("type", "%" + docType + "%");
+            documentsInfo = query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.sessionFactory = null;
+        }
+        return documentsInfo;
     }
 
     @Override
