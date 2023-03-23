@@ -31,27 +31,27 @@ public class DocumentInfoSaver {
         list.forEach(docInfo -> {
             switch (docInfo.getDocType()) {
                 case "Акты":
-                    docInfo.setDocPath(ROOT + ACTS + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + ACTS + docInfo.getDocPath());
                     break;
 
                 case "Судебные документы":
-                    docInfo.setDocPath(ROOT + CLAIMS + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + CLAIMS + docInfo.getDocPath());
                     break;
 
                 case "Договоры":
-                    docInfo.setDocPath(ROOT + CONTRACTS + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + CONTRACTS + docInfo.getDocPath());
                     break;
 
                 case "Защита прав потребителей":
-                    docInfo.setDocPath(ROOT + CUSTOMER + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + CUSTOMER + docInfo.getDocPath());
                     break;
 
                 case "Доверенности":
-                    docInfo.setDocPath(ROOT + PROXY + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + PROXY + docInfo.getDocPath());
                     break;
 
                 case "Расписки":
-                    docInfo.setDocPath(ROOT + VOUCHERS + docInfo.getDocPath().replaceAll(" ", "_"));
+                    docInfo.setDocPath(ROOT + VOUCHERS + docInfo.getDocPath());
             }
         });
     }
