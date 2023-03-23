@@ -1,13 +1,14 @@
 package org.example.service;
 
+import org.example.entity.DocumentInfo;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 
 import java.util.List;
 
 public interface DocumentService {
-    SendDocument getByIndex(int docIndex);
+    DocumentInfo getByIndex(int docIndex);
 
-    List<SendDocument> getAllByType(String docType);
+    List<DocumentInfo> getAllByType(String docType);
 
     void delete(int docIndex);
 

@@ -25,7 +25,7 @@ public class BotUserDAOImp extends AbstractDAO implements BotUserDAO {
     }
 
     @Override
-    public BotUser getById(int id) {
+    public BotUser getById(long id) {
         return (BotUser) findEntityById(id, new BotUser());
     }
 

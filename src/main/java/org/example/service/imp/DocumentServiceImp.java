@@ -1,56 +1,42 @@
 package org.example.service.imp;
 
-import org.example.bot.Bot;
 import org.example.dao.DocumentDAO;
+import org.example.dao.imp.DocumentDAOImp;
+import org.example.entity.DocumentInfo;
 import org.example.service.DocumentService;
-import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentServiceImp implements DocumentService {
-    private final Bot bot;
-    private final String documentsDirectory;
     private final DocumentDAO documentDAO;
+    private static volatile DocumentServiceImp instance;
 
-    public DocumentServiceImp(Bot bot, String documentsDirectory, DocumentDAO documentDAO) {
-        this.bot = bot;
-        this.documentsDirectory = documentsDirectory;
-        this.documentDAO = documentDAO;
+    private DocumentServiceImp() {
+        this.documentDAO = new DocumentDAOImp();
     }
 
-    @Override
-    public SendDocument getByIndex(int docIndex) {
-        var docInfo = documentDAO.getByIndex(docIndex);
-
-        if (docInfo == null) {
-            return null;
+    public static DocumentServiceImp getInstance() {
+        if (instance == null) {
+            synchronized (DocumentServiceImp.class) {
+                if (instance == null) {
+                    instance = new DocumentServiceImp();
+                }
+            }
         }
-
-        File file = Path.of(docInfo.getDocPath()).toFile();
-        InputFile inputFile = new InputFile(file);
-        SendDocument sendDocument = new SendDocument();
-        sendDocument.setDocument(inputFile);
-        return sendDocument;
+        return instance;
     }
 
     @Override
-    public List<SendDocument> getAllByType(String docType) {
-        List<SendDocument> sendDocuments = new ArrayList<>();
-        var docsInfo = documentDAO.getAllByType(docType);
+    public DocumentInfo getByIndex(int docIndex) {
+        return documentDAO.getByIndex(docIndex);
+    }
 
-        docsInfo.forEach(doc -> {
-            File file = Path.of(doc.getDocPath()).toFile();
-            sendDocuments.add(SendDocument.builder()
-                    .document(new InputFile(file))
-                    .build());
-        });
-        return sendDocuments;
+    @Override
+    public List<DocumentInfo> getAllByType(String docType) {
+        return documentDAO.getAllByType(docType);
     }
 
     @Override

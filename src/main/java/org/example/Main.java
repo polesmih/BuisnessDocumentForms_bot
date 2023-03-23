@@ -18,7 +18,7 @@ public class Main {
             Bot bot = new Bot();
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(bot);
-            bot.initMenu();
+            bot.init();
             saveDocInfoToDb();
         } catch (TelegramApiException e) {
             e.printStackTrace();

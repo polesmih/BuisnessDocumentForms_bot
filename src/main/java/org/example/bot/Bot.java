@@ -2,104 +2,86 @@ package org.example.bot;
 
 import org.example.bot.settings.ConfigSettings;
 import org.example.bot.settings.Logger;
-import org.example.handler.MessageHandler;
-import org.example.handler.actsHandler.ActSelectionHandler;
-import org.example.handler.actsHandler.ActTypes;
-import org.example.handler.claimsHandler.ClimesSelectionHandler;
-import org.example.handler.claimsHandler.ClimesTypes;
-import org.example.handler.contractsHandler.ContractSelectionHandler;
-import org.example.handler.contractsHandler.ContractTypes;
-import org.example.handler.customerHandler.CustomerSelectionHandler;
-import org.example.handler.customerHandler.CustomerTypes;
-import org.example.handler.proxyHandler.ProxySelectionHandler;
-import org.example.handler.proxyHandler.ProxyTypes;
-import org.example.handler.serviceCommandHandler.CommandSelectionHandler;
-import org.example.handler.serviceCommandHandler.CommandServiceType;
-import org.example.handler.typesOfDocumentsHandler.DocumentSelectionHandler;
-import org.example.handler.typesOfDocumentsHandler.DocumentTypes;
-import org.example.handler.vouchersHandler.VouchersSelectionHandler;
-import org.example.handler.vouchersHandler.VouchersTypes;
+import org.example.handler.HandlerContext;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static org.example.command.BotCommands.LIST_OF_COMMAND;
-import static org.example.bot.settings.MessagesConst.UNKNOWN;
+import static org.example.bot.settings.StringConst.UNKNOWN;
+import static org.example.component.BotCommands.LIST_OF_COMMAND;
 
 public class Bot extends TelegramLongPollingBot {
-    public Logger logger = new Logger();
-    DocumentSelectionHandler documentsHandler = new DocumentSelectionHandler();
-    ContractSelectionHandler contractsHandler = new ContractSelectionHandler();
-    ActSelectionHandler actHandler = new ActSelectionHandler();
-    ProxySelectionHandler proxyHandler = new ProxySelectionHandler();
-    VouchersSelectionHandler vouchersHandler = new VouchersSelectionHandler();
-    ClimesSelectionHandler climesHandler = new ClimesSelectionHandler();
-    CustomerSelectionHandler customerHandler = new CustomerSelectionHandler();
-    DocumentTypes docTypes = new DocumentTypes();
-    ContractTypes contTypes = new ContractTypes();
-    ActTypes actTypes = new ActTypes();
-    ProxyTypes proxyTypes = new ProxyTypes();
-    VouchersTypes vouchersTypes = new VouchersTypes();
-    ClimesTypes climesTypes = new ClimesTypes();
-    CustomerTypes customerTypes = new CustomerTypes();
-    CommandServiceType commandType = new CommandServiceType();
-    CommandSelectionHandler commandHandler = new CommandSelectionHandler(this);
-    private final static ConfigSettings settings = ConfigSettings.getInstance();
+    public final Logger logger;
+    private HandlerContext context;
+    private final ConfigSettings settings;
 
-    public void initMenu() throws TelegramApiException {
+    public Bot() {
+        this.logger = new Logger();
+        this.settings = ConfigSettings.getInstance();
+    }
+
+    public void init() throws TelegramApiException {
+        this.context = new HandlerContext(this);
         execute(new SetMyCommands(LIST_OF_COMMAND, new BotCommandScopeDefault(), null));
     }
 
     @Override
     public String getBotUsername() {
-        return settings.getUserName();
+        return settings.getBotName();
     }
 
     @Override
     public String getBotToken() {
-        return settings.getToken();
+        return settings.getBotToken();
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            var messageText = update.getMessage().getText();
-            var chatId = update.getMessage().getChatId();
+        if (update == null) {
+            return;
+        }
 
-            if (commandType.types().contains(messageText)) {
-                commandHandler.onUpdateReceived(update);
+        if (update.hasMessage()) {
+            var message = update.getMessage();
 
-            } else if (docTypes.types().contains(messageText)) {
-                documentsHandler.onUpdateReceived(update);
+            if (message.hasText()) {
+                var text = message.getText();
 
-            } else if (contTypes.types().contains(messageText)) {
-                contractsHandler.onUpdateReceived(update);
-
-            } else if (actTypes.types().contains(messageText)) {
-                actHandler.onUpdateReceived(update);
-
-            } else if (proxyTypes.types().contains(messageText)) {
-                proxyHandler.onUpdateReceived(update);
-
-            } else if (vouchersTypes.types().contains(messageText)) {
-                vouchersHandler.onUpdateReceived(update);
-
-            } else if (climesTypes.types().contains(messageText)) {
-                climesHandler.onUpdateReceived(update);
-
-            } else if (customerTypes.types().contains(messageText)) {
-                customerHandler.onUpdateReceived(update);
-
-            } else {
-                try {
-                    execute(MessageHandler.sendMessage(chatId, UNKNOWN));
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
+                if (text.startsWith("/")) {
+                    context.setHandler(context.getCommandHandler());
+                } else {
+                    context.setHandler(context.getTextHandler());
                 }
-                logger.log("Неизвестная команда");
+            } else if (message.hasDocument()) {
+                context.setHandler(context.getDocumentHandler());
+            } else {
+                sendMessage(SendMessage.builder()
+                        .chatId(message.getChatId())
+                        .text(UNKNOWN)
+                        .build());
+                return;
             }
+            context.handling(update);
+        }
+    }
+
+    public void sendMessage(SendMessage response) {
+        try {
+            execute(response);
+        } catch (TelegramApiException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void sendMessage(SendDocument response) {
+        try {
+            execute(response);
+        } catch (TelegramApiException ex) {
+            ex.printStackTrace();
         }
     }
 }

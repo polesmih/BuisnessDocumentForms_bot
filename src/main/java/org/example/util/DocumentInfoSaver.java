@@ -7,8 +7,8 @@ import org.example.entity.DocumentInfo;
 import java.util.List;
 
 public class DocumentInfoSaver {
-    private final DocumentDAO documentDAO;
     private final String ROOT;
+    private final DocumentDAO documentDAO;
     private static final String ACTS = "acts/";
     private static final String CLAIMS = "claims/";
     private static final String CONTRACTS = "contracts/";

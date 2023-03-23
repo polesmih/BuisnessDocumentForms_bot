@@ -7,7 +7,7 @@ import java.util.List;
 public interface BotUserService {
     List<BotUser> getAll();
 
-    BotUser findById(int id);
+    BotUser findById(long id);
 
     void add(BotUser user);
 

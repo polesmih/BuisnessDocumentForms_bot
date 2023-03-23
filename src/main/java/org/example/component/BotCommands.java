@@ -1,4 +1,4 @@
-package org.example.command;
+package org.example.component;
 
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 

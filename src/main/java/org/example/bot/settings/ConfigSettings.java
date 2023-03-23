@@ -8,15 +8,25 @@ import java.util.Properties;
 
 @Data
 public class ConfigSettings {
-    private String token;
-    private String userName;
+    private String botToken;
+    private String botName;
     private String docPath;
     private String jsonPath;
     private Properties properties;
-    public static final String FILE_NAME = "config.properties";
-    private static ConfigSettings instance = new ConfigSettings();
+    private static volatile ConfigSettings instance;
+    private static final String FILE_NAME = "config.properties";
+
+    private ConfigSettings() {
+    }
 
     public static ConfigSettings getInstance() {
+        if (instance == null) {
+            synchronized (ConfigSettings.class) {
+                if (instance == null) {
+                    instance = new ConfigSettings();
+                }
+            }
+        }
         return instance;
     }
 
@@ -30,13 +40,13 @@ public class ConfigSettings {
                 throw new IOException(String.format("Error loading properties file '%s'", FILE_NAME));
             }
 
-            token = properties.getProperty("token");
-            if (token == null) {
+            botToken = properties.getProperty("token");
+            if (botToken == null) {
                 throw new RuntimeException("Token value is null");
             }
 
-            userName = properties.getProperty("username");
-            if (userName == null) {
+            botName = properties.getProperty("username");
+            if (botName == null) {
                 throw new RuntimeException("UserName value is null");
             }
 

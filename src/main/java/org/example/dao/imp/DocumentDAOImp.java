@@ -46,7 +46,7 @@ public class DocumentDAOImp extends AbstractDAO implements DocumentDAO {
         DocumentInfo documentInfo = null;
         try (Session session = sessionFactory.openSession()) {
             Query<DocumentInfo> query = session.createQuery("from DocumentInfo where docIndex=:fIndex", DocumentInfo.class);
-            query.setParameter("fIndex", "%" + docIndex + "%");
+            query.setParameter("fIndex", docIndex);
             documentInfo = query.getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();

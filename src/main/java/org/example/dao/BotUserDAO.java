@@ -7,7 +7,7 @@ import java.util.List;
 public interface BotUserDAO {
     List<BotUser> getAll();
 
-    BotUser getById(int id);
+    BotUser getById(long id);
 
     void save(BotUser user);
 

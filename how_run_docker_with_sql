@@ -12,5 +12,8 @@ CREATE DATABASE doc_bot;
 # Чтобы остановить контейнер
 docker stop doc-bot
 
+# Для запуска контейнера
+dicker start doc-bot
+
 # Если хотим удалить контейнер
 docker rm doc-bot
