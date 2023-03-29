@@ -103,7 +103,8 @@ public abstract class AbstractDAO {
         sessionFactory = HibernateConfig.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
 
-            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM " + entity.getClass().getSimpleName(), Long.class);
+//            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM " + entity.getClass().getSimpleName(), Long.class);
+            Query<Long> query = session.createQuery("SELECT SUM (numberVisits) FROM " + entity.getClass().getSimpleName(), Long.class);
             return query.getSingleResult();
         } catch (HibernateException e) {
             throw new RuntimeException("Failed to get " + entity.getClass().getSimpleName() + " count", e);
