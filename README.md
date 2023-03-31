@@ -14,6 +14,7 @@ Telegram-бот для отправки пользователю готовог�
 
 ## В проекте использованы:  
 Java  
+Hiberbate  
 MySQL  
 GitHub - repository  
 Telegram Bot API  
