@@ -9,9 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.time.LocalDateTime;
 
+import static org.example.bot.settings.StringConst.HI;
+
 public class StartCommand implements Command {
     private final BotUserService botUserService;
-    public final static String HELLO_MSG = "!\nЭтот бот знает формы некоторых документов," +
+    public final static String HELLO_MSG = "! " + HI + "\nЭтот бот знает формы некоторых документов," +
             "которые тебе могут пригодиться." +
             "\nВведи команду /key";
 
@@ -22,17 +24,26 @@ public class StartCommand implements Command {
     @Override
     public void execute(HandlerContext context, Message message) {
         User userFrom = message.getFrom();
+        
+        // Всё-таки лучше сначала проверить наличие пользователя в базе, чтобы впустую не создавать нового пользователя
+        BotUser botUser = botUserService.findById(userFrom.getId());
 
-        if (botUserService.findById(userFrom.getId()) == null) {
-            BotUser botUser = BotUser.builder()
-                    .id(userFrom.getId())
-                    .firstName(userFrom.getFirstName())
-                    .lastName(userFrom.getLastName())
-                    .userName(userFrom.getUserName())
-                    .dateCreate(LocalDateTime.now())
-                    .build();
+        if (botUser == null) {
+           botUser = BotUser.builder()
+                   .id(userFrom.getId())
+                   .firstName(userFrom.getFirstName())
+                   .lastName(userFrom.getLastName())
+                   .userName(userFrom.getUserName())
+                   .dateCreate(LocalDateTime.now())
+                   .numberVisits(1L)
+                   .build();
 
             botUserService.add(botUser);
+        }
+        else {
+            // Если же пользователь уже есть, то мы ему просто сетим новое значение для поля и обновляем. Заново его создавать не нужно
+            botUser.setNumberVisits(botUser.getNumberVisit()++);
+            botUserService.update(botUser);
         }
 
         var response = "Привет, " + userFrom.getFirstName() + HELLO_MSG;

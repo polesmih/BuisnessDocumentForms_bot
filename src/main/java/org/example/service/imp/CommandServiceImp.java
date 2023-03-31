@@ -21,7 +21,7 @@ public class CommandServiceImp implements CommandService {
         this.commandMap = ImmutableMap.<String, Command>builder()
                 .put(START.getCommandName(), new StartCommand(botUserService))
                 .put(KEY.getCommandName(), new KeyCommand())
-                .put(INFO.getCommandName(), new InfoCommand())
+                .put(INFO.getCommandName(), new InfoCommand(botUserService))
                 .put(DONATE.getCommandName(), new DonateCommand())
                 .put(HELP.getCommandName(), new HelpCommand())
                 .build();
