@@ -51,11 +51,6 @@ public abstract class AbstractDAO {
             transaction = session.beginTransaction();
 
             session.merge(entity);
-
-//            Query<?> query = session.createQuery("FROM " + entity.getClass().getSimpleName(), entity.getClass());
-//            query.setParameter("numberVisits", + 1L);
-//            query.executeUpdate();
-
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -107,9 +102,7 @@ public abstract class AbstractDAO {
     public long getEntityCount(BotEntity entity) {
         sessionFactory = HibernateConfig.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
-
-//            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM " + entity.getClass().getSimpleName(), Long.class);
-            Query<Long> query = session.createQuery("SELECT SUM (numberVisits) FROM " + entity.getClass().getSimpleName(), Long.class);
+            Query<Long> query = session.createQuery("SELECT SUM (countVisits) FROM " + entity.getClass().getSimpleName(), Long.class);
             return query.getSingleResult();
         } catch (HibernateException e) {
             throw new RuntimeException("Failed to get " + entity.getClass().getSimpleName() + " count", e);

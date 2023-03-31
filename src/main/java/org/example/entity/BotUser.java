@@ -19,8 +19,6 @@ public class BotUser implements BotEntity{
     private String lastName;
     private String userName;
     private LocalDateTime dateCreate;
-
-    //для общего отслеживания динамики пользования, предлагаю вести контроль посещений
-    private Long numberVisits;
+    private Long countVisits;
 }
 

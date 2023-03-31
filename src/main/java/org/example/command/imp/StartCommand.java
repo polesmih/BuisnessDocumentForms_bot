@@ -24,8 +24,7 @@ public class StartCommand implements Command {
     @Override
     public void execute(HandlerContext context, Message message) {
         User userFrom = message.getFrom();
-        
-        // Всё-таки лучше сначала проверить наличие пользователя в базе, чтобы впустую не создавать нового пользователя
+
         BotUser botUser = botUserService.findById(userFrom.getId());
 
         if (botUser == null) {
@@ -35,14 +34,13 @@ public class StartCommand implements Command {
                    .lastName(userFrom.getLastName())
                    .userName(userFrom.getUserName())
                    .dateCreate(LocalDateTime.now())
-                   .numberVisits(1L)
+                   .countVisits(1L)
                    .build();
 
             botUserService.add(botUser);
         }
         else {
-            // Если же пользователь уже есть, то мы ему просто сетим новое значение для поля и обновляем. Заново его создавать не нужно
-            botUser.setNumberVisits(botUser.getNumberVisit()++);
+            botUser.setCountVisits(botUser.getCountVisits() + 1);
             botUserService.update(botUser);
         }
 
