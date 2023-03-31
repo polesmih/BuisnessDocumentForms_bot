@@ -51,6 +51,11 @@ public abstract class AbstractDAO {
             transaction = session.beginTransaction();
 
             session.merge(entity);
+
+//            Query<?> query = session.createQuery("FROM " + entity.getClass().getSimpleName(), entity.getClass());
+//            query.setParameter("numberVisits", + 1L);
+//            query.executeUpdate();
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

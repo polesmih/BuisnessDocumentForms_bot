@@ -1,8 +1,6 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Builder
+@Builder (toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bot_users")
@@ -25,3 +23,4 @@ public class BotUser implements BotEntity{
     //для общего отслеживания динамики пользования, предлагаю вести контроль посещений
     private Long numberVisits;
 }
+
