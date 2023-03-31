@@ -25,45 +25,23 @@ public class StartCommand implements Command {
     public void execute(HandlerContext context, Message message) {
         User userFrom = message.getFrom();
 
-        BotUser botUser = BotUser.builder()
-                .id(userFrom.getId())
-                .firstName(userFrom.getFirstName())
-                .lastName(userFrom.getLastName())
-                .userName(userFrom.getUserName())
-                .dateCreate(LocalDateTime.now())
-                .numberVisits(1L)
-                .build();
+        BotUser botUser = botUserService.findById(userFrom.getId());
 
-        if (botUserService.findById(userFrom.getId()) == null) {
-//            botUser = BotUser.builder()
-//                    .id(userFrom.getId())
-//                    .firstName(userFrom.getFirstName())
-//                    .lastName(userFrom.getLastName())
-//                    .userName(userFrom.getUserName())
-//                    .dateCreate(LocalDateTime.now())
-//                    .numberVisits(1L)
-//                    .build();
-
-            botUserService.add(botUser);
-
-        // для реализации инкремента ячейки посещений, если в БД уже есть пользователь
-        }
-        else {
-//
-//                botUser = new BotUser().toBuilder()
-//                        .numberVisits(botUser.getNumberVisits() + 1L)
-//                        .build();
-
+        if (botUser == null) {
             botUser = BotUser.builder()
                     .id(userFrom.getId())
                     .firstName(userFrom.getFirstName())
                     .lastName(userFrom.getLastName())
                     .userName(userFrom.getUserName())
                     .dateCreate(LocalDateTime.now())
-                    .numberVisits(botUser.getNumberVisits() + 1L)
+                    .countVisits(1L)
                     .build();
 
-                botUserService.update(botUser);
+            botUserService.add(botUser);
+        }
+        else {
+            botUser.setCountVisits(botUser.getCountVisits() + 1);
+            botUserService.update(botUser);
         }
 
         var response = "Привет, " + userFrom.getFirstName() + HELLO_MSG;
