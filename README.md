@@ -1,7 +1,7 @@
 # BuisnessDocumentForms_bot (java)  
 Telegram-бот для отправки пользователю готового к заполнению и печати файла Word, содержащего форму юридического или процедурного документа из представленных на выбор.  
 
-Бот в Telegram: [@SimpleForms_bot](https://t.me/SimpleForms_bot)  
+Бот в Telegram (измененная версия, отличная от представленного кода программы): [@SimpleForms_bot](https://t.me/SimpleForms_bot)  
 [Статья на Хабр](https://habr.com/ru/post/723580/)  
 
 ## Лицензия  
